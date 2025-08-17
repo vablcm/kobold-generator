@@ -1,15 +1,8 @@
 # 🐉 Kobolds Generator
 
-A small web app that randomly generates Kobolds based on selected **boons** and **drawbacks**.  
-Inspired by *Let There Be Kobolds* CYOA.
+A small web app that randomly generates Kobolds for the *Let There Be Kobolds* CYOA based on the selected **boons** and **drawbacks**.  
 
-## ✨ Features
-- Choose **boons**, **drawbacks**, and a **race** for your Kobold.
-- Supports *halfboons* (50% chance rolls).
-- Handles **incompatible traits** automatically.
-- Race-specific trait logic (e.g. Cutebolds, Werebolds).
-- Clean, responsive interface with collapsible lists.
-- Tooltip system explaining requirements or incompatibilities.
+👉 [https://vablcm.github.io/kobold-generator/](https://vablcm.github.io/kobold-generator/)
 
 ## 🚀 Usage
 1. Open the site in your browser.
