@@ -49,6 +49,10 @@ h1 {
   line-height: 1.2;
 }
 
+h1::before {
+  content: "🐉 ";
+}
+
 span,
 p {
   margin: 0 0 1rem;
