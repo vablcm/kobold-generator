@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kobold Generator</title>
+    <meta name="description" content="Randomly generates Kobolds based on selected boons and drawbacks." />
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" defer src="./script.js"></script>
+  </head>
+  <body>
+    <main class="site">
+      <section class="center-box" role="region" aria-label="Centered content">
+        <h1>Kobold Generator</h1>
+        <span>
+          Let There Be Kobolds CYOA: <a href="https://imgchest.com/p/na7k8evrk78">https://imgchest.com/p/na7k8evrk78</a>
+        </span>
+        <p>
+          Randomly generates Kobolds based on selected boons and drawbacks.
+        </p>
+
+        <h2>Kobold Archetype</h2>
+        <ul class="options races"></ul>
+
+        <h2 class="collapsible">General Boons</h2>
+        <ul class="options boons"></ul>
+        
+        <h2 class="collapsible">General Drawbacks</h2>
+        <ul class="options drawbacks"></ul>
+
+        <div class="subsection">
+          <h3 class="subtitle collapsible">High Risk, High Reward</h3>
+          <ul class="options halfboons"></ul>
+        </div>
+
+        <h2>Generate Kobolds</h2>
+        <div class="generator-controls">
+          <label for="koboldCount">Number to generate</label>
+          <input type="number" id="koboldCount" min="1" max="100" value="5" />
+          <button class="btn" id="generateKobolds">Generate</button>
+        </div>
+
+        <div id="koboldsResults" class="results" aria-live="polite"></div>
+
+        <template id="koboldItemTemplate">
+          <article class="kobold-card">
+            <div class="row">
+              <label for="koboldName">Name:</label>
+              <input type="text" id="koboldName" class="nameInput" />
+            </div>
+        
+            <div class="row grid-3">
+              <div class="pill"><label>Race:</label> <span class="raceValue">No race selected</span></div>
+              <div>
+                <label>Professions</label>
+                <input type="text" class="professionsInput" placeholder="Worker, Cook, Medic, ..." />
+              </div>
+              <div>
+                <label>Classes</label>
+                <input type="text" class="classesInput" placeholder="Duelist, Wizard, Rogue, ..." />
+              </div>
+            </div>
+        
+            <div class="row grid-4 traits">
+              <div>
+                <h4>Rare Boons</h4>
+                <ul class="rareBoons"></ul>
+              </div>
+              <div>
+                <h4>Common Boons</h4>
+                <ul class="commonBoons"></ul>
+              </div>
+              <div>
+                <h4>Rare Drawbacks</h4>
+                <ul class="rareDrawbacks"></ul>
+              </div>
+              <div>
+                <h4>Common Drawbacks</h4>
+                <ul class="commonDrawbacks"></ul>
+              </div>
+            </div>
+          </article>
+        </template>
+        
+      </section>
+    </main>
+  </body>
+</html>
