@@ -1,5 +1,5 @@
 import { races, boons, drawbacks } from './data.js';
-import { onItemClick } from './utils.js';
+import { onItemClick } from './renderer.js';
 
 // Helper: find data item for a rendered <li>
 function getItemFromLi(li) {

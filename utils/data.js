@@ -1,12 +1,12 @@
-import { enableOrDisableElement } from './utils.js';
+import { enableOrDisableElement } from './renderer.js';
 
 export const races = [
-    { name: "Cutebold", incompatible: "Diversify: Cutebold", applyTraits: applyCuteboldTraits },
-    { name: "Roughbold", incompatible: "Diversify: Roughbold", applyTraits: applyRoughboldTraits },
-    { name: "Werebold", incompatible: "Diversify: Werebold", applyTraits: applyWereboldTraits },
-    { name: "Fairybold", incompatible: "Diversify: Fairybold", applyTraits: applyFairyboldTraits },
-    { name: "Robold", incompatible: "Diversify: Robold", applyTraits: applyRoboldTraits },
-    { name: "Dogbold", incompatible: "Diversify: Dogbold", applyTraits: applyDogboldTraits },
+    { name: "Cutebold", startingKobolds: 5, incompatible: "Diversify: Cutebold", applyTraits: applyCuteboldTraits },
+    { name: "Roughbold", startingKobolds: 4, incompatible: "Diversify: Roughbold", applyTraits: applyRoughboldTraits },
+    { name: "Werebold", startingKobolds: 4, incompatible: "Diversify: Werebold", applyTraits: applyWereboldTraits },
+    { name: "Fairybold", startingKobolds: 3, incompatible: "Diversify: Fairybold", applyTraits: applyFairyboldTraits },
+    { name: "Robold", startingKobolds: 3, incompatible: "Diversify: Robold", applyTraits: applyRoboldTraits },
+    { name: "Dogbold", startingKobolds: 3, incompatible: "Diversify: Dogbold", applyTraits: applyDogboldTraits },
 ];
 
 const elements = ["Fire", "Water", "Lightning", "Acid", "Sound", "Darkness", "Light"];

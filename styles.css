@@ -22,7 +22,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -278,12 +278,11 @@ a:hover {
   flex-wrap: wrap;
 }
 
-/* Fix alignment for the Name row */
 .kobold-card .row:first-of-type {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  column-gap: .6rem;
+  display: flex;
   align-items: center;
+  gap: .5rem;
+  flex-wrap: nowrap;
 }
 
 .kobold-card .row:first-of-type label {
@@ -292,8 +291,8 @@ a:hover {
 }
 
 .kobold-card .row:first-of-type input.nameInput {
+  flex: 1 1 auto;
   min-width: 0;
-  width: 100%;
 }
 
 .kobold-card .grid-3 {
@@ -347,4 +346,48 @@ a:hover {
   border: 1px solid var(--ring);
   border-radius: 999px;
   padding: .3rem .6rem;
+}
+
+.pill.evolved-dragonkin {
+  background: linear-gradient(135deg, #aeb4bb, #6f7780);
+  border: 1px solid #97a0aa;
+  color: #0b0f14 !important;
+}
+
+.pill.evolved-dragon {
+  background: linear-gradient(135deg, #ffd34d, #b8860b);
+  border: 1px solid #d4af37;
+  color: #0b0f14 !important;
+}
+
+.pill.evolved-dragonkin *,
+.pill.evolved-dragon * {
+  color: #0b0f14 !important;
+}
+
+.pill.evolved {
+  font-size: 0.9rem;
+}
+
+.tag.note {
+  background: rgba(122, 162, 247, .12);
+  color: #cfe0ff;
+  border: 1px solid #7aa2f7;
+  margin-left: .35rem;
+  font-size: .7rem;
+  border-radius: 999px;
+  padding: .1rem .4rem;
+}
+
+.tag.note.twin {
+  display: inline-block;
+  margin-right: .25rem;
+  padding: 0 .35rem;
+  font-size: .65rem;
+  border-radius: 999px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+  vertical-align: middle;
+  color: #000;
 }
