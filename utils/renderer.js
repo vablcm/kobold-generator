@@ -161,11 +161,31 @@ function mergeHalfboonsRespectRaceGuarantee(boonsPool, selectedHalfboons) {
 }
 
 /* GENERATION RENDERING */
-export function generateKobolds() {
+const tick = () => new Promise(res => setTimeout(res, 0));
+
+export async function onGenerateClick() {
+    const btn = document.getElementById('generateKobolds');
+    if (btn.disabled) return;
+
+    const originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Generating...";
+
+    await tick();
+
+    try {
+        await generateKoboldsAsync();
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+async function generateKoboldsAsync() {
     resetTwinColors();
 
     const countInput = document.getElementById('koboldCount');
-    const koboldNumber = Math.max(1, Math.min(100, parseInt(countInput?.value || '1', 10)));
+    const koboldNumber = Math.max(1, Math.min(1000, parseInt(countInput?.value || '1', 10)));
     const results = document.getElementById('koboldsResults');
     const template = document.getElementById('koboldItemTemplate');
 
@@ -183,46 +203,37 @@ export function generateKobolds() {
 
     results.innerHTML = '';
 
+    const BATCH = 50;
+    let frag = document.createDocumentFragment();
+
     for (let i = 0; i < koboldNumber; i++) {
-        const { node, race, boonResult } = buildKoboldCardForRace(template, null, {
+        const selectedTraits = {
             selectedBoons,
             selectedDrawbacks,
             selectedHalfboons
-        });
-
-        // Determine if this kobold needs a twin
-        let forcedTwin = false;
-        if (doubleEventEnabled && race?.name) {
-            const left = twinQuotaByRace.get(race.name) || 0;
-            if (left > 0) {
-                forcedTwin = true;
-                twinQuotaByRace.set(race.name, left - 1);
-            }
         }
 
-        const rolledTwin = doubleEventEnabled && hasDoubleEvent(boonResult);
-        const needTwin = forcedTwin || rolledTwin;
+        const { node, race, boonResult } = buildKoboldCardForRace(template, null, selectedTraits);
 
+        const needTwin = hasTwin(doubleEventEnabled, race, twinQuotaByRace, boonResult);
         if (needTwin) {
-            const twinColor = nextTwinColor();
+            const { node: twinNode } = createTwin(node, template, race, selectedTraits);
 
-            addTwinBadge(node, twinColor);
-
-            const raceObj = races.find(r => r.name === race?.name) || null;
-            const { node: twinNode } = buildKoboldCardForRace(template, raceObj, {
-                selectedBoons,
-                selectedDrawbacks,
-                selectedHalfboons,
-                excludeDoubleEvent: true,          // ← twins cannot roll Double Event
-            });
-            addTwinBadge(twinNode, twinColor);
-
-            results.appendChild(node);
-            results.appendChild(twinNode);
+            frag.appendChild(node);
+            frag.appendChild(twinNode);
         } else {
-            results.appendChild(node);
+            frag.appendChild(node);
+        }
+
+        // flush in batches and yield so UI can update
+        if ((i + 1) % BATCH === 0) {
+            results.appendChild(frag);
+            frag = document.createDocumentFragment();
+            await tick();
         }
     }
+
+    if (frag.childNodes.length) results.appendChild(frag);
 }
 
 function getSelectedItems(selector, dataArray) {
@@ -278,7 +289,6 @@ function buildKoboldCardForRace(
     return { node, race, boonResult };
 }
 
-
 function computeRace() {
     const selectedBonusRaces = Array.from(document.querySelectorAll('.option.boon.selected'))
         .filter(li => li.textContent.startsWith("Diversify:"));
@@ -294,6 +304,41 @@ function computeRace() {
 
     return raceLi ? races.find(race => raceLi.textContent.includes(race.name)) : { name: "No race selected" };
 }
+
+function hasTwin(doubleEventEnabled, race, twinQuotaByRace, boonResult) {
+    let forcedTwin = false;
+    if (doubleEventEnabled && race?.name) {
+        const left = twinQuotaByRace.get(race.name) || 0;
+        if (left > 0) {
+            forcedTwin = true;
+            twinQuotaByRace.set(race.name, left - 1);
+        }
+    }
+
+    const rolledTwin = doubleEventEnabled && boonResult.doubleEvent === true;
+    return forcedTwin || rolledTwin;
+}
+
+function createTwin(node, template, race, {
+    selectedBoons, selectedDrawbacks, selectedHalfboons
+}) {
+    const twinColor = nextTwinColor();
+
+    addTwinBadge(node, twinColor);
+
+    const raceObj = races.find(r => r.name === race?.name) || null;
+    const { node: twinNode } = buildKoboldCardForRace(template, raceObj, {
+        selectedBoons,
+        selectedDrawbacks,
+        selectedHalfboons,
+        excludeDoubleEvent: true,
+    });
+
+    addTwinBadge(twinNode, twinColor);
+
+    return { node: twinNode };
+}
+
 
 function fillList(root, selector, names, kind, rarity, linkedSet) {
     const ul = root.querySelector(selector);
@@ -366,9 +411,4 @@ function addTwinBadge(node, color) {
     badge.style.background = color;
 
     container.insertBefore(badge, nameLabel);
-}
-
-
-function hasDoubleEvent(boonResult) {
-    return boonResult?.common?.includes("Double Event") || boonResult?.rare?.includes("Double Event");
 }

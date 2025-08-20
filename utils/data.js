@@ -1,3 +1,4 @@
+import { rollDoubleEvent, rollSuddenEvolution } from './calculator.js';
 import { enableOrDisableElement } from './renderer.js';
 
 export const races = [
@@ -62,7 +63,7 @@ export const boons = [
     { name: "Brave Little Kobolds", prob: 1, incompatible: "Cowardly Kobolds" },
     { name: "Regrow", prob: 1 },
     { name: "Slimy Perspiration", prob: 0.15 },
-    { name: "Sudden Evolution", prob: 0.001, prob2: 0.0001 },
+    { name: "Sudden Evolution", prob: 0.001, prob2: 0.0001, customRoll: rollSuddenEvolution },
     { name: "Technobold", prob: 0.1 },
     { name: "Burrower", prob: 1 },
     { name: "Strength Up", prob: 0.2 },
@@ -75,7 +76,7 @@ export const boons = [
     { name: "Magic Attunement", prob: 0.05 },
     { name: "Fellow Monster Friend", prob: 1 },
     { name: "Superior Dragon Genes", prob: 1, incompatible: "Inferior Kobold Genes" },
-    { name: "Double Event", prob: 0.5 },
+    { name: "Double Event", prob: 0.5, customRoll: rollDoubleEvent },
     { name: "Modular", prob: 1 },
     ...breathWeapons,
     ...elementalResistances,
@@ -271,4 +272,4 @@ function applyDogboldTraits({ selectedBoons, selectedDrawbacks }) {
 
     bias(wisdomUp, 2);
     guarantee(mansBestFriend);
-} 
+}

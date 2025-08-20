@@ -391,3 +391,13 @@ a:hover {
   vertical-align: middle;
   color: #000;
 }
+
+#generateKobolds:disabled {
+  opacity: 1;
+  cursor: wait;
+  pointer-events: none;
+  background: #2b3950;
+  color: #9fb3c8;
+  border: 1px solid #3c4a5e;
+  box-shadow: none;
+}

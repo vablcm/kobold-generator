@@ -65,3 +65,26 @@ export function randomizeSelections(opts = {}) {
             }
         });
 }
+
+/**
+ * Select all boons and drawbacks, and set koboldCount to 1000.
+ */
+export function selectAllAndMax() {
+    Array.from(document.querySelectorAll('.option.selected'))
+        .forEach(li => toggleViaHandler(li));
+
+    Array.from(document.querySelectorAll('.option.boon'))
+        .filter(li => !li.classList.contains('disabled'))
+        .forEach(li => {
+            if (!li.classList.contains('selected')) toggleViaHandler(li);
+        });
+
+    Array.from(document.querySelectorAll('.option.drawback'))
+        .filter(li => !li.classList.contains('disabled'))
+        .forEach(li => {
+            if (!li.classList.contains('selected')) toggleViaHandler(li);
+        });
+
+    const countInput = document.getElementById('koboldCount');
+    if (countInput) countInput.value = 1000;
+}

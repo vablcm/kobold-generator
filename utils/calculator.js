@@ -18,11 +18,11 @@ export function computeItems(items, externalSucceeded = undefined) {
         }
     }
 
-    const { results: afterSync, linked } = applySynchronousElement(results, items);
-    const { results: afterEvolution, evolutionNotes } = applySuddenEvolutionRoll(afterSync, items);
-    const filteredResults = filterResults(afterEvolution);
+    const { results: syncedResults, linked } = applySynchronousElement(results, items);
+    const filteredResults = filterResults(syncedResults);
 
-    return { ...filteredResults, linked, evolutionNotes }; // { common:[], rare:[], linked:Set<string>, Map<name, "Dragon"|"Dragonkin"> }
+    // { common:[], rare:[], evolutionNotes:Map<name, "Dragon"|"Dragonkin">, doubleEvent:boolean, linked:Set<string> }
+    return { ...filteredResults, linked };
 }
 
 function filterResults(results) {
@@ -31,6 +31,7 @@ function filterResults(results) {
     const notDoubleEvent = name => name !== "Double Event";
 
     return {
+        ...results,
         common: results.common.filter(notSynchronousElement),
         rare: results.rare.filter(notDiversify).filter(notSynchronousElement).filter(notDoubleEvent),
     };
@@ -39,7 +40,7 @@ function filterResults(results) {
 function cycleFallback(items, decidedSet, succeededSet, results) {
     for (const it of items) {
         if (decidedSet.has(it.name)) continue;
-        applyRoll(it, results, succeededSet);
+        rollTrait(it, results, succeededSet);
         decidedSet.add(it.name);
     }
 }
@@ -59,7 +60,7 @@ function processPass(items, decidedSet, succeededSet, results, poolNames, extern
             continue;
         }
 
-        applyRoll(it, results, succeededSet);
+        rollTrait(it, results, succeededSet);
         decidedSet.add(it.name);
         progressed = true;
     }
@@ -67,8 +68,11 @@ function processPass(items, decidedSet, succeededSet, results, poolNames, extern
     return progressed;
 }
 
-function applyRoll(item, results, succeededSet) {
-    if (item.name === "Sudden Evolution") return; // handled in applySuddenEvolutionRoll
+function rollTrait(item, results, succeededSet) {
+    if (item.customRoll) {
+        item.customRoll(item, results, succeededSet);
+        return;
+    }
 
     const p = effectiveProb(item);
     if (p >= 1) {
@@ -106,10 +110,10 @@ function effectiveProb(item) {
 
 /* Handle "Synchronous Element" Boon */
 function applySynchronousElement(results, items) {
-    const linked = new Set(); // names added due to linkage (for UI badge)
+    const linked = new Set();
 
     if (!isSynchronousSelected(items)) {
-        return { results, linked }; // nothing to do
+        return { results, linked };
     }
 
     const pairs = buildSynchronousPairs(items);
@@ -167,16 +171,12 @@ function isSynchronousSelected(items) {
     return items.some(it => it.name === "Synchronous Element");
 }
 
-// Roll Sudden Evolution after normal processing.
-// Returns { results, evolutionNotes } where evolutionNotes is Map<name, "Dragon"|"Dragonkin">
-function applySuddenEvolutionRoll(results, items) {
+export function rollSuddenEvolution(item, results, succeededSet) {
     const evolutionNotes = new Map();
-    const se = items.find(i => i.name === "Sudden Evolution");
-    if (!se) return { results, evolutionNotes };
 
     // Dragon has its own prob2; Dragonkin uses the effective (biased) main prob
-    const pDragon = se.prob2 ?? 0;
-    const pKin = effectiveProb(se); // respects _biasedProb if you set one
+    const pDragon = item.prob2 ?? 0;
+    const pKin = effectiveProb(item); // respects _biasedProb if you set one
 
     let form = null;
     if (Math.random() < pDragon) form = "Dragon";
@@ -190,6 +190,14 @@ function applySuddenEvolutionRoll(results, items) {
         evolutionNotes.set("Sudden Evolution", form);
     }
 
-    return { results, evolutionNotes };
+    results.evolutionNotes = evolutionNotes; // Map<name, "Dragon"|"Dragonkin">
+    succeededSet.add(item.name);
 }
 
+export function rollDoubleEvent(item, results, succeededSet) {
+    const p = effectiveProb(item);
+    if (p >= 1 || Math.random() < p) {
+        results.doubleEvent = true;
+        succeededSet.add(item.name);
+    }
+}

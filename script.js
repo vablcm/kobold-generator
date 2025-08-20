@@ -1,6 +1,6 @@
 import { races, boons, drawbacks } from './utils/data.js';
-import { randomizeSelections } from './utils/test-helper.js';
-import { generateKobolds, renderList } from './utils/renderer.js';
+import { randomizeSelections, selectAllAndMax } from './utils/test-helper.js';
+import { onGenerateClick, renderList } from './utils/renderer.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     renderList('.races', races, 'race');
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const genBtn = document.getElementById('generateKobolds');
-    if (genBtn) genBtn.addEventListener('click', generateKobolds);
+    if (genBtn) genBtn.addEventListener('click', onGenerateClick);
 });
 
-Object.assign(window, { randomizeSelections });
+Object.assign(window, { randomizeSelections, selectAllAndMax });
