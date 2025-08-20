@@ -13,33 +13,44 @@
   <body>
     <main class="site">
       <section class="center-box" role="region" aria-label="Centered content">
-        <h1>Kobold Generator</h1>
-        <span>
-          Let There Be Kobolds CYOA: <a href="https://imgchest.com/p/na7k8evrk78">https://imgchest.com/p/na7k8evrk78</a>
-        </span>
-        <p>
-          Randomly generates Kobolds based on selected boons and drawbacks.
-        </p>
+        <div class="intro">
+          <h1>Kobold Generator</h1>
+          <span>
+            Let There Be Kobolds CYOA: 
+            <a href="https://imgchest.com/p/na7k8evrk78">https://imgchest.com/p/na7k8evrk78</a>
+          </span>
+          <p>
+            Randomly generates Kobolds based on selected boons and drawbacks.
+          </p>
 
-        <h2>Kobold Archetype</h2>
-        <ul class="options races"></ul>
-
-        <h2 class="collapsible">General Boons</h2>
-        <ul class="options boons"></ul>
-        
-        <h2 class="collapsible">General Drawbacks</h2>
-        <ul class="options drawbacks"></ul>
-
-        <div class="subsection">
-          <h3 class="subtitle collapsible">High Risk, High Reward</h3>
-          <ul class="options halfboons"></ul>
+          <h2>Kobold Archetype</h2>
+          <ul class="options races"></ul>
         </div>
 
-        <h2>Generate Kobolds</h2>
-        <div class="generator-controls">
-          <label for="koboldCount">Number to generate</label>
-          <input type="number" id="koboldCount" min="1" max="1000" value="10" />
-          <button class="btn" id="generateKobolds">Generate</button>
+        <div class="selectors">
+          <div class="col col-boons">
+            <h2 class="collapsible">General Boons</h2>
+            <ul class="options boons"></ul>
+          </div>
+
+          <div class="col col-drawbacks">
+            <h2 class="collapsible">General Drawbacks</h2>
+            <ul class="options drawbacks"></ul>
+
+            <div class="subsection">
+              <h3 class="subtitle collapsible">High Risk, High Reward</h3>
+              <ul class="options halfboons"></ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="generate-section">
+          <h2>Generate Kobolds</h2>
+          <div class="generator-controls">
+            <label for="koboldCount">Number to generate</label>
+            <input type="number" id="koboldCount" min="1" max="1000" value="10" />
+            <button class="btn" id="generateKobolds">Generate</button>
+          </div>
         </div>
 
         <div id="koboldsResults" class="results" aria-live="polite"></div>
@@ -50,9 +61,11 @@
               <label for="koboldName">Name:</label>
               <input type="text" id="koboldName" class="nameInput" />
             </div>
-        
+
             <div class="row grid-3">
-              <div class="pill"><label>Race:</label> <span class="raceValue">No race selected</span></div>
+              <div class="pill race-pill">
+                <label>Race:</label> <span class="raceValue">No race selected</span>
+              </div>
               <div>
                 <label for="koboldProfessions">Professions</label>
                 <input type="text" id="koboldProfessions" class="professionsInput" placeholder="Worker, Cook, Medic, ..." />
@@ -62,25 +75,8 @@
                 <input type="text" id="koboldClasses" class="classesInput" placeholder="Duelist, Wizard, Rogue, ..." />
               </div>
             </div>
-        
-            <div class="row grid-4 traits">
-              <div>
-                <h4>Rare Boons</h4>
-                <ul class="rareBoons"></ul>
-              </div>
-              <div>
-                <h4>Common Boons</h4>
-                <ul class="commonBoons"></ul>
-              </div>
-              <div>
-                <h4>Rare Drawbacks</h4>
-                <ul class="rareDrawbacks"></ul>
-              </div>
-              <div>
-                <h4>Common Drawbacks</h4>
-                <ul class="commonDrawbacks"></ul>
-              </div>
-            </div>
+
+            <div class="traits"></div>
           </article>
         </template>
         

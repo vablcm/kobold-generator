@@ -35,12 +35,25 @@ body {
 }
 
 .center-box {
-  width: min(720px, 100%);
+  width: min(1280px, 100%);
   background: var(--panel);
   border: 1px solid var(--ring);
   border-radius: var(--radius);
   padding: clamp(20px, 4vw, 36px);
   box-shadow: var(--shadow);
+}
+
+.selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  margin-top: 1rem;
+}
+
+.col h2,
+.col .subtitle {
+  margin-top: 0;
 }
 
 h1 {
@@ -55,7 +68,6 @@ h1::before {
 
 span,
 p {
-  margin: 0 0 1rem;
   color: var(--muted);
 }
 
@@ -159,6 +171,7 @@ a:hover {
   margin: 0.5rem 0 1rem 0;
   transition: max-height 0.3s ease, padding 0.3s ease, margin 0.3s ease;
   overflow: hidden;
+  justify-content: flex-start;
 }
 
 .option {
@@ -233,8 +246,9 @@ a:hover {
 
 .results {
   display: grid;
-  gap: .8rem;
-  margin-top: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
 }
 
 .kobold div {
@@ -264,6 +278,13 @@ a:hover {
   border: 1px solid var(--ring);
   border-radius: 12px;
   padding: .8rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 .kobold-card label {
@@ -329,6 +350,31 @@ a:hover {
 
 .kobold-card .grid-4.traits {
   align-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .5rem;
+}
+
+.kobold-card .grid-4.traits::-webkit-scrollbar {
+  width: 6px;
+}
+
+.kobold-card .grid-4.traits::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kobold-card .grid-4.traits::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.kobold-card .grid-4.traits::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+@media (min-width: 1100px) {
+  .kobold-card .grid-4.traits {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 .kobold-card .traits>div {
@@ -346,6 +392,24 @@ a:hover {
   border: 1px solid var(--ring);
   border-radius: 999px;
   padding: .3rem .6rem;
+}
+
+.pill.race-pill {
+  display: inline-block;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.pill.race-pill.shrink {
+  font-size: 0.9em;
+}
+
+.pill.race-pill.shrink2 {
+  font-size: 0.8em;
 }
 
 .pill.evolved-dragonkin {
@@ -367,6 +431,55 @@ a:hover {
 
 .pill.evolved {
   font-size: 0.9rem;
+}
+
+.traits .trait-section {
+  margin-bottom: .7rem;
+}
+
+.traits .trait-section h4 {
+  margin: 0 0 .35rem;
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+.traits .pills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+}
+
+.traits .pills-wrap .tag+.tag.note {
+  margin-left: .25rem;
+}
+
+.traits .tag {
+  display: inline-flex;
+  align-items: center;
+  padding: .18rem .45rem;
+  border-radius: 999px;
+  background: #0f1520;
+  border: 1px solid var(--ring);
+  font-size: .75rem;
+  line-height: 1.1;
+}
+
+.tag .linked-icon {
+  margin-right: 0.1rem;
+  font-size: 0.8em;
+  opacity: 0.7;
+}
+
+.traits .tag.boon {
+  color: #32CD32;
+}
+
+.traits .tag.drawback {
+  color: #FF6347;
+}
+
+.traits .tag.rare {
+  font-weight: 600;
 }
 
 .tag.note {
@@ -400,4 +513,32 @@ a:hover {
   color: #9fb3c8;
   border: 1px solid #3c4a5e;
   box-shadow: none;
+}
+
+.intro {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.intro h1 {
+  justify-content: center;
+}
+
+.intro span,
+.intro p {
+  display: block;
+  margin: 0.5rem 0;
+}
+
+.intro .options.races {
+  justify-content: center;
+}
+
+.generate-section {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.generate-section .generator-controls {
+  justify-content: center;
 }

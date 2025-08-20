@@ -279,10 +279,7 @@ function buildKoboldCardForRace(
     const drawbackResult = computeItems(drawbacksPool, boonSuccesses);
 
     // render
-    fillList(node, '.rareBoons', boonResult.rare, 'boon', 'rare', boonResult.linked);
-    fillList(node, '.commonBoons', boonResult.common, 'boon', 'common', boonResult.linked);
-    fillList(node, '.rareDrawbacks', drawbackResult.rare, 'drawback', 'rare', drawbackResult.linked);
-    fillList(node, '.commonDrawbacks', drawbackResult.common, 'drawback', 'common', drawbackResult.linked);
+    renderTraitsAsPills(node, boonResult, drawbackResult);
 
     decorateEvolvedKobolds(node, boonResult.evolutionNotes);
 
@@ -339,25 +336,49 @@ function createTwin(node, template, race, {
     return { node: twinNode };
 }
 
+function renderTraitsAsPills(node, boonResult, drawbackResult) {
+    const container = node.querySelector('.traits');
+    if (!container) return;
+    container.innerHTML = '';
 
-function fillList(root, selector, names, kind, rarity, linkedSet) {
-    const ul = root.querySelector(selector);
-    ul.innerHTML = '';
-    names.forEach(name => {
-        const li = document.createElement('li');
-        const pill = document.createElement('span');
-        pill.className = `tag ${kind} ${rarity}`;
-        pill.textContent = name;
-        li.appendChild(pill);
+    const sections = [
+        { title: 'Rare Boons', items: boonResult.rare, kind: 'boon', rarity: 'rare' },
+        { title: 'Rare Drawbacks', items: drawbackResult.rare, kind: 'drawback', rarity: 'rare' },
+        { title: 'Common Boons', items: boonResult.common, kind: 'boon', rarity: 'common' },
+        { title: 'Common Drawbacks', items: drawbackResult.common, kind: 'drawback', rarity: 'common' },
+    ];
 
-        if (linkedSet?.has(name)) {
-            const note = document.createElement('span');
-            note.className = 'tag note';
-            note.textContent = 'synced';
-            li.appendChild(note);
-        }
+    sections.forEach(({ title, items, kind, rarity }) => {
+        if (!items || items.length === 0) return;
 
-        ul.appendChild(li);
+        const section = document.createElement('div');
+        section.className = 'trait-section';
+
+        const heading = document.createElement('h4');
+        heading.textContent = title;
+        section.appendChild(heading);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'pills-wrap';
+
+        items.forEach(name => {
+            const pill = document.createElement('span');
+            pill.className = `tag ${kind} ${rarity}`;
+            pill.textContent = name;
+
+            if (boonResult.linked?.has?.(name)) {
+                const icon = document.createElement('span');
+                icon.className = 'linked-icon';
+                icon.textContent = '🔗';
+                icon.title = 'Synchronous Element';
+                pill.prepend(icon);
+            }
+
+            wrap.appendChild(pill);
+        });
+
+        section.appendChild(wrap);
+        container.appendChild(section);
     });
 }
 
@@ -376,6 +397,10 @@ function decorateEvolvedKobolds(node, evolutionNotes) {
     } else {
         racePill.classList.remove("evolved-dragon", "evolved-dragonkin");
     }
+
+    const raceNameLength = raceValue.textContent.length;
+    racePill.classList.toggle('shrink', raceNameLength >= 14 && raceNameLength < 18);
+    racePill.classList.toggle('shrink2', raceNameLength >= 18);
 }
 
 function fusedRaceName(raceName, form) {
